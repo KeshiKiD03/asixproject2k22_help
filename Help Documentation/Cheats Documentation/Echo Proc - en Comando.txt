@@ -1,0 +1,4 @@
+sudo systemctl restart systemd-resolved.service
+
+https://ourcodeworld.com/articles/read/422/how-to-perform-a-man-in-the-middle-mitm-attack-with-kali-linux
+
