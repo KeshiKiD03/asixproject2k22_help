@@ -1,0 +1,109 @@
+# Comandos Network Manager NMCLI
+
+https://www.liquidweb.com/kb/how-to-install-and-configure-nmcli/
+
+What is nmcli?
+
+nmcli stands for Network Management Command-Line Interface, and is a tool for managing the NetworkManager application and reporting on the status of the network. It can be utilized as a substitution for nm-applet or other similar graphical clients. nmcli is used to display, create, delete, edit, activate, deactivate network connections, and control and display network device status.
+
+## INSTALAR
+
+apt-get update && apt-get upgrade
+
+apt-get install network-manager
+
+
+## START
+
+systemctl start NetworkManager.service 
+
+## ENABLE PARA QUE SE INICIE
+
+systemctl enable NetworkManager.service 
+
+
+
+#### ASIGNAR IP ESTÁTICA SERVIDOR SOA
+
+nmcli con add type ethernet con-name "Cryptosec" ifname enp0s8 ip4 192.168.3.1/24
+
+#### ASIGNAR IP ESTÁTICA SERVIDOR RECURSIVO + CLIENTES
+
+nmcli con add type ethernet con-name "Cryptosec" ifname enp0s8 ip4 192.168.3.2/24 gw4 192.168.3.1 
+
+#### MODIFICAR Y AÑADIR UN DNS SERVER
+
+nmcli con mod "Cryptosec" ipv4.dns 8.8.8.8 192.168.3.1
+
+root@ubuntu:~# grep dns /etc/NetworkManager/system-connections/Cryptosec
+dns=8.8.8.8;
+
+
+## DHCP
+
+#### ASIGNAR IP DHCP 
+
+nmcli con add type ethernet con-name "DHCP-Cryptosec" ifname enp0s8 ipv4.method auto
+
+#### ARCHIVO DE CONFIGURACIÓN
+
+cat /etc/NetworkManager/system-connectionsdhcp-home
+
+```
+[connection]
+id=dhcp-home
+uuid=0611c2c8-83ad-40f7-b7bb-b57668af203d
+type=ethernet
+interface-name=ens33
+permissions=
+
+[ethernet]
+mac-address-blacklist=
+
+[ipv4]
+dns-search=
+method=auto
+
+[ipv6]
+addr-gen-mode=stable-privacy
+dns-search=
+method=auto
+```
+
+
+
+##### ACTIVAR DHCP
+
+root@ubuntu:~# nmcli con up dhcp-home 
+Connection successfully activated (D-Bus active path: /org/freedesktop/NetworkManager/ActiveConnection/1)
+
+
+
+## SYNTAX
+
+nmcli networking { on | off | connectivity } [ARGUMENTS...]
+
+The networking commands use nmcli to check network status, or to enable or disable networking components.
+
+on, off - This command enables or disables various network connections via nmcli.
+
+Connectivity [check] - nmcli gets the connection state and retains individual network configuration types as connections which contain the associated info on each kind of network connection. 
+
+nmcli connection { show | up | down | modify | add | edit | clone | delete | monitor | reload | load | import | export } [ARGUMENTS...]
+
+## Cambiar hostname
+
+nmcli general hostname [nombre-HostNew]
+
+## vER DISPOSITIVOS
+
+nmcli device show
+
+## Ver dispositivo especifico
+
+nmcli -p device show
+
+## Monitor de actividad
+
+
+
